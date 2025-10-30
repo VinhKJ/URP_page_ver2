@@ -1,0 +1,320 @@
+Đây là bản phân tích kiến trúc hoàn chỉnh cho Landing Page URP.
+
+1 — Tổng quan thiết kế (Dữ liệu URP)
+Tên dự án: University Readiness Passport (URP)
+
+Slogan: “Your Skills. Verified. Your Future. Empowered.” (Nguồn: Invitation for Partnership.pdf)
+
+Nội dung chính:
+
+Vấn đề (Problem): Nhấn mạnh "CV tự khai thiếu minh chứng", "Doanh nghiệp tốn chi phí đào tạo lại" (Nguồn: Khảo sát Doanh nghiệp).
+
+Giải pháp (Solution): Giới thiệu "Hộ chiếu Kỹ năng Số", "AI SkillMap" (bài test 20 câu SJT), và "Radar 6 Kỹ năng" (dựa trên khung ATC21S).
+
+Tính năng "Xanh" (Hook): Tích hợp "Green Token" và mô hình "Learn to Earn Green" (Nguồn: Phần II, DEMO IDEA.docx).
+
+Các khối (Blocks): Hero, Vấn đề/Giải pháp, Radar 6 Kỹ năng, Lộ trình 21 ngày, Dành cho Doanh nghiệp, FAQ, Đội ngũ (Phương, Vinh, Quyên, Quỳnh, Châu), Footer.
+
+Nút CTA (Call-to-Action) chính: "Test Năng lực ngay", "Bắt đầu Hành trình", "Đăng nhập".
+
+2 — Wireframe chi tiết (page “URP” — homepage)
+Trình bày theo thứ tự từ trên xuống (top → bottom).
+
+Header (Fixed top - Thanh điều hướng cố định):
+
+Left: Logo URP.
+
+Center: Menu links [Test Radar (SJT)] | [Khám phá Bản thân (MBTI/DISC)] | [Dành cho Doanh nghiệp].
+
+Far-right: Button phụ [Đăng nhập], Button chính (primary) [Test Năng lực ngay].
+
+Hero (Above-the-fold - Khung nhìn đầu tiên):
+
+Left column (Text):
+
+H1: “University Readiness Passport”
+
+Sub: “Your Skills. Verified. Your Future. Empowered.”
+
+Paragraph: "CV của bạn thiếu minh chứng? Bắt đầu xác thực năng lực thực tế của bạn ngay hôm nay với bài test SJT khoa học."
+
+CTA primary [Test Năng lực ngay] (link đến test.urp.com), secondary [Tìm hiểu thêm].
+
+Right column (Visual):
+
+Mockup của "Digital Skill Passport" (có QR code) hoặc hình ảnh Radar 6 Kỹ năng.
+
+Key metrics / Trust strip (Thanh uy tín):
+
+3-4 thẻ nhỏ: "Dựa trên khung ATC21S", "170+ Sinh viên đã khảo sát", "Đối tác đào tạo...".
+
+Value Proposition / How it works (Làm thế nào?):
+
+Grid 4 cột hoặc Timeline 4 bước:
+
+Làm Test SJT: Hoàn thành 20 câu hỏi tình huống (AI SkillMap).
+
+Nhận Radar: Khám phá Radar 6 Kỹ năng (Teamwork, COM, CRI...).
+
+Rèn luyện (GĐ2): Tham gia Mini-Project & nhận Feedback.
+
+Nhận Passport: Sở hữu Hộ chiếu Kỹ năng (QR Verified).
+
+Product features / URP Skill Insight (Tính năng):
+
+Giới thiệu chi tiết về Radar 6 Kỹ năng (biểu đồ radar) và tính năng "Green Token" (học để trồng cây).
+
+Solution / For Employers (Dành cho Doanh nghiệp):
+
+Left (Problem): "Tốn 3-6 tháng đào tạo lại nhân viên mới? CV không phản ánh đúng năng lực?"
+
+Right (Solution): "Tiếp cận hồ sơ SV đã được xác thực qua Radar. Giảm chi phí tuyển dụng & đào tạo." [Xem thêm cho Doanh nghiệp].
+
+Microservice CTA Blocks (Khối CTA Dịch vụ):
+
+(Đây là điểm mấu chốt của kiến trúc microservice)
+
+Block 1: "Bạn đã sẵn sàng cho Radar Kỹ năng?" -> CTA [Test SJT ngay] (link test.urp.com).
+
+Block 2: "Thấu hiểu bản thân?" -> CTA [Khám phá MBTI/DISC] (link profile.urp.com).
+
+FAQ (Accordion): Các câu hỏi thường gặp.
+
+Team (Cards): Giới thiệu 5 thành viên (Phương, Vinh, Quyên, Quỳnh, Châu).
+
+Footer: Thông tin liên hệ, links (Privacy Policy), social icons.
+
+3 — Page “Dành cho Doanh nghiệp” (nội dung chuyên sâu)
+Trang này giải thích giá trị B2B (Nguồn: Khảo sát Doanh nghiệp).
+
+Top: Vấn đề (Tuyển dụng dựa trên CV giấy tốn kém, không hiệu quả).
+
+Middle: Các thẻ dịch vụ (Service cards):
+
+Sàng lọc Ứng viên: Dùng Radar URP để lọc hồ sơ theo 6 kỹ năng.
+
+Tiếp cận Nhân tài: Truy cập "Talent Pool" (hồ bơi nhân tài) đã được xác thực.
+
+Đồng xây dựng: Hợp tác với URP để xây dựng khung năng lực cho ngành.
+
+Proof: Trích dẫn số liệu (nếu có) từ khảo sát DN.
+
+CTA / Contact form: Form liên hệ (email + quy mô công ty) cho doanh nghiệp.
+
+4 — Luồng Login / Đăng ký (chi tiết)
+Mục tiêu: Lưu thông tin user, cấp JWT (Access + Refresh Token) để xác thực qua các microservice.
+
+UI Flow (Frontend):
+
+User nhấn "Đăng nhập" hoặc "Test Năng lực ngay" -> Hiện Modal/Trang đăng nhập.
+
+Form: email, password. Link "Chưa có tài khoản? Đăng ký".
+
+On submit -> Gọi API POST /api/auth/login.
+
+Thành công (Quan trọng):
+
+Lưu accessToken vào bộ nhớ (memory) (React Context/Zustand).
+
+Server trả về refreshToken trong Cookie (HttpOnly, Secure).
+
+Điều hướng (Redirect) user đến trang microservice (VD: test.urp.com).
+
+Backend Endpoints (Node.js/Express):
+
+POST /api/auth/register {name, email, password}: Validate, hash (bcrypt), tạo user, kích hoạt n8n gửi mail chào mừng.
+
+POST /api/auth/login {email, password}: Tìm user, bcrypt.compare, trả về { user, accessToken } và set refreshToken vào cookie.
+
+POST /api/auth/refresh: Dùng refreshToken (trong cookie) để lấy accessToken mới.
+
+POST /api/auth/logout: Xóa refreshToken trong DB và xóa cookie.
+
+GET /api/users/me (Yêu cầu xác thực): Dùng accessToken để lấy thông tin user.
+
+JWT Specifics (Chi tiết JWT):
+
+accessToken: Ngắn hạn (15 phút). Lưu trong bộ nhớ React.
+
+refreshToken: Dài hạn (7 ngày). Lưu trong Cookie (HttpOnly, Secure, SameSite=Strict).
+
+Auth Security (Bảo mật):
+
+Hash mật khẩu (Bcrypt).
+
+Rate Limit (giới hạn số lần) các endpoint login/register.
+
+HTTPS (Vercel và Render đã hỗ trợ sẵn).
+
+5 — Database Schema (Core tables, Postgres, MVP)
+Đây là schema cốt lõi cho MVP, đã được tối ưu từ bản mẫu của bạn và kế hoạch của chúng ta (dùng Postgres thay Redis).
+
+SQL
+
+-- Bảng người dùng (trung tâm)
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Bảng lưu Refresh Token (thay thế Redis)
+CREATE TABLE refresh_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    token_hash VARCHAR(255) NOT NULL, -- Hash của refresh token
+    expires_at TIMESTAMPTZ NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Bảng kết quả test SJT (Radar 6 cánh)
+CREATE TABLE sjt_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    radar_scores JSONB NOT NULL, -- { "com": 70, "team": 80, ... }
+    raw_answers JSONB, -- Lưu 20 câu trả lời thô
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Bảng kết quả test tính cách (MBTI)
+CREATE TABLE mbti_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    result_type VARCHAR(10) NOT NULL, -- VD: 'INTJ'
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Bảng kết quả test hành vi (DISC)
+CREATE TABLE disc_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    result_type VARCHAR(10) NOT NULL, -- VD: 'D/I'
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+6 — Storage + CDN
+Dịch vụ: Cloudflare R2 (Như Kế hoạch chi phí v2).
+
+Mục đích: Lưu ảnh profile của user, và (sau này) các file "minh chứng" (PDF, video) cho mini-project.
+
+CDN: Tích hợp sẵn Cloudflare CDN để tăng tốc độ tải ảnh.
+
+7 — Frontend Architecture (Component Map + Tech Stack)
+Tech Stack: Next.js + TypeScript + Tailwind CSS (cho Landing Page để SEO) và Vite (React) + TypeScript + Tailwind (cho các App/Microservice).
+
+State: Zustand hoặc React Context (nhẹ hơn Redux) cho auth/user state. React Query (TanStack Query) để fetch và cache dữ liệu API.
+
+Forms: react-hook-form + zod (để validate).
+
+Apps (Deploy riêng biệt trên Vercel):
+
+urp-landing-page (Code cho urp.com).
+
+urp-sjt-app (Code cho test.urp.com).
+
+urp-profile-app (Code cho profile.urp.com).
+
+Components (Tái sử dụng): Header, Footer, ModalAuth, RadarChart, Button.
+
+8 — Backend Architecture (Stack đã chốt)
+Framework: Node.js (Express) (Như bạn đã xác nhận).
+
+DB: PostgreSQL (chúng ta sẽ dùng Render Postgres).
+
+Auth: Logic JWT + Refresh Token (HttpOnly Cookie) tự code trong Node.js.
+
+Email: Resend (Được kích hoạt thông qua n8n).
+
+Automation: n8n (Tự host trên Render).
+
+Deployment:
+
+Frontend Apps: Deploy trên Vercel (Gói Hobby 0đ).
+
+Backend API: Deploy trên Render (Gói Starter $7/tháng).
+
+Database: Deploy trên Render (Gói Starter $7/tháng).
+
+n8n Worker: Deploy trên Render (Gói Starter $7/tháng).
+
+9 — UX Details và Checklist UI Elements (URP)
+Kiểm tra các trạng thái button (default, hover, active, disabled).
+
+Thông báo lỗi (inline validation) bằng Tiếng Việt rõ ràng.
+
+Radar Chart: Phải responsive (hiển thị tốt trên mobile) và có aria-label cho 6 kỹ năng.
+
+QR Code (trang Profile): Đảm bảo đủ lớn và độ tương phản cao để quét.
+
+"Green Token": Cần có yếu tố UI (VD: icon lá cây + con số) hiển thị nổi bật trên Header (khi đã đăng nhập) để khuyến khích người dùng.
+
+Màu sắc (theo Phần I) phải nhất quán.
+
+10 — Bảo mật & Quy tắc xử lý dữ liệu cá nhân
+Thu thập và lưu trữ PII (Personal Identifiable Information) của sinh viên (users, sjt_results).
+
+Cần có trang "Chính sách Bảo mật" (Privacy Policy) và yêu cầu người dùng đồng ý khi đăng ký.
+
+Ghi log (logging) cần che (mask) các dữ liệu nhạy cảm (VD: mật khẩu, email).
+
+11 — Bản phác thảo cấu trúc (Text Wireframe URP)
+/ (Home - URP)
+Header: [Logo URP] [Test Radar] [Khám phá] [Cho Doanh nghiệp] [Đăng nhập] [Test Năng lực ngay]
+
+Hero:
+  Left: H1(URP), Slogan, Paragraph(Vấn đề CV), [Test Năng lực ngay] [Tìm hiểu thêm]
+  Right: Image (Mockup Radar 6 Kỹ năng / Passport QR)
+
+MetricsStrip: [Dựa trên ATC21S] [170+ SV Khảo sát] [Đối tác...]
+
+How-it-works:
+  [Card1: Làm Test SJT] -> [Card2: Nhận Radar] -> [Card3: Rèn luyện] -> [Card4: Nhận Passport]
+
+Features:
+  Left: [Giới thiệu Radar 6 Kỹ năng (Teamwork, COM, CRI...)]
+  Right: [Giới thiệu "Green Token" (Học để trồng cây)]
+
+CTA-Blocks:
+  Block1: "Bạn đã sẵn sàng cho Radar Kỹ năng?" -> [Test SJT ngay] (-> test.urp.com)
+  Block2: "Thấu hiểu bản thân?" -> [Khám phá MBTI] (-> profile.urp.com/mbti)
+
+For_DN (Dành cho Doanh nghiệp):
+  Left: Problem (Tuyển dụng tốn kém...)
+  Right: Solution (Lọc hồ sơ qua Radar...) [Liên hệ Hợp tác]
+
+FAQ (Accordion)
+Team (Grid 5 thành viên)
+Footer: Contact Info | Links (Policy) | Social Icons
+12 — Chi tiết triển khai login sequence (ngắn gọn)
+Client POST /api/auth/login (email, password).
+
+Server (Node.js) validate -> cấp accessToken (JSON, 15m) và refreshToken (Secure httpOnly cookie, 7d).
+
+Client (React) lưu accessToken vào memory (Context/Zustand). Dùng Authorization: Bearer <token> cho các request cần bảo vệ.
+
+Khi API trả 401 (hết hạn accessToken), client tự động gọi POST /api/auth/refresh.
+
+Server (Node.js) dùng refreshToken (từ cookie) để validate và cấp accessToken mới.
+
+Logout -> POST /api/auth/logout -> Server xóa refreshToken trong DB và xóa cookie.
+
+13 — Ưu tiên kỹ thuật & Lựa chọn nhanh (URP Stack)
+DB chính: PostgreSQL (Host trên Render).
+
+Cache/Session/Revocation: Dùng PostgreSQL (bảng refresh_tokens).
+
+File storage: Cloudflare R2 (+ Cloudflare CDN).
+
+Backend: Node.js (Express) (Host trên Render).
+
+Frontend: Next.js / React + TypeScript + Tailwind (Host trên Vercel).
+
+Auth: JWT (RS256), refresh tokens trong httpOnly cookies.
+
+Automation: n8n (Self-host trên Render).
+
+14 — Hành động tiếp theo
+Chúng ta đã hoàn thành kiến trúc cho "App 1: Landing Page (urp.com)".
+
+Như bạn đã đề cập, bước tiếp theo là đi sâu vào các "microservice". Tôi đã sẵn sàng để phác thảo Sơ đồ Tuần tự (Mermaid) và API spec chi tiết cho "App 2: Ứng dụng Test SJT (test.urp.com)" khi bạn muốn nhé.
