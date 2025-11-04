@@ -5,11 +5,11 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User as SelectUser } from "@shared/schema";
+import { toPublicUser, type PublicUser } from "@shared/schema";
 
 declare global {
   namespace Express {
-    interface User extends SelectUser {}
+    interface User extends PublicUser {}
   }
 }
 
@@ -29,11 +29,23 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 export function setupAuth(app: Express) {
+  const sessionSecret = process.env.SESSION_SECRET;
+  if (!sessionSecret) {
+    throw new Error("SESSION_SECRET must be set");
+  }
+
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET!,
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
+  };
+
+  const isProduction = app.get("env") === "production";
+  sessionSettings.cookie = {
+    ...(sessionSettings.cookie ?? {}),
+    sameSite: isProduction ? "none" : "lax",
+    secure: isProduction,
   };
 
   app.set("trust proxy", 1);
@@ -47,7 +59,7 @@ export function setupAuth(app: Express) {
       if (!user || !(await comparePasswords(password, user.password))) {
         return done(null, false);
       } else {
-        return done(null, user);
+        return done(null, toPublicUser(user));
       }
     }),
   );
@@ -55,7 +67,10 @@ export function setupAuth(app: Express) {
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
     const user = await storage.getUser(id);
-    done(null, user);
+    if (!user) {
+      return done(null, false);
+    }
+    done(null, toPublicUser(user));
   });
 
   app.post("/api/register", async (req, res, next) => {
@@ -70,9 +85,11 @@ export function setupAuth(app: Express) {
         password: await hashPassword(req.body.password),
       });
 
-      req.login(user, (err) => {
+      const publicUser = toPublicUser(user);
+
+      req.login(publicUser, (err) => {
         if (err) return next(err);
-        res.status(201).json(user);
+        res.status(201).json(publicUser);
       });
     } catch (error) {
       next(error);
