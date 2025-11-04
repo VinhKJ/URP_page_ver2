@@ -4,6 +4,53 @@ import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 
+const defaultCorsOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:4173",
+  "http://127.0.0.1:4173",
+];
+
+const configuredOrigins = (process.env.CORS_ALLOWED_ORIGINS ?? "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowAnyOrigin = configuredOrigins.includes("*");
+const allowedOrigins = new Set(
+  [...defaultCorsOrigins, ...configuredOrigins.filter((origin) => origin !== "*")],
+);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && (allowAnyOrigin || allowedOrigins.has(origin))) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+
+  if (req.method === "OPTIONS") {
+    const requestMethod = req.headers["access-control-request-method"];
+    const requestHeaders = req.headers["access-control-request-headers"];
+
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      typeof requestMethod === "string" ? requestMethod : "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      typeof requestHeaders === "string" ? requestHeaders : "Content-Type, Authorization",
+    );
+    res.setHeader("Access-Control-Max-Age", "86400");
+
+    res.status(204).end();
+    return;
+  }
+
+  next();
+});
+
 declare module 'http' {
   interface IncomingMessage {
     rawBody: unknown

@@ -1,5 +1,36 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+function normalizeBaseUrl(baseUrl: string | undefined): string {
+  if (!baseUrl) return "";
+  return baseUrl.endsWith("/") ? baseUrl.slice(0, -1) : baseUrl;
+}
+
+const apiBaseUrl = normalizeBaseUrl(import.meta.env.VITE_API_BASE_URL);
+
+function resolveApiUrl(path: string): string {
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
+
+  if (!apiBaseUrl) {
+    return path;
+  }
+
+  if (path.startsWith("/")) {
+    return `${apiBaseUrl}${path}`;
+  }
+
+  return `${apiBaseUrl}/${path}`;
+}
+
+function buildQueryKeyPath(queryKey: readonly unknown[]): string {
+  if (queryKey.length === 1 && typeof queryKey[0] === "string") {
+    return queryKey[0];
+  }
+
+  return queryKey.map(String).join("/");
+}
+
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -12,7 +43,9 @@ export async function apiRequest(
   url: string,
   data?: unknown | undefined,
 ): Promise<Response> {
-  const res = await fetch(url, {
+  const targetUrl = resolveApiUrl(url);
+
+  const res = await fetch(targetUrl, {
     method,
     headers: data ? { "Content-Type": "application/json" } : {},
     body: data ? JSON.stringify(data) : undefined,
@@ -29,7 +62,8 @@ export const getQueryFn: <T>(options: {
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const res = await fetch(queryKey.join("/") as string, {
+    const resourcePath = buildQueryKeyPath(queryKey);
+    const res = await fetch(resolveApiUrl(resourcePath), {
       credentials: "include",
     });
 

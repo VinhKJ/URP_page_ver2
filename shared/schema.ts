@@ -55,6 +55,12 @@ export const registerUserSchema = insertUserSchema.extend({
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type RegisterUser = z.infer<typeof registerUserSchema>;
 export type User = typeof users.$inferSelect;
+export type PublicUser = Omit<User, "password">;
+
+export function toPublicUser(user: User): PublicUser {
+  const { password: _password, ...publicFields } = user;
+  return publicFields;
+}
 export type SjtResult = typeof sjtResults.$inferSelect;
 export type MbtiResult = typeof mbtiResults.$inferSelect;
 export type DiscResult = typeof discResults.$inferSelect;
