@@ -24,7 +24,7 @@ export function MicroserviceCTA() {
               </p>
               <Button size="lg" className="group" data-testid="button-cta-sjt">
                 <a
-                  href="https://test.urp.com"
+                  href="https://sjc-radar-test-1040426527128.us-west1.run.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center"
@@ -70,7 +70,7 @@ export function MicroserviceCTA() {
                 data-testid="button-cta-mbti"
               >
                 <a
-                  href="https://profile.urp.com"
+                  href="https://urp-ver1.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center"

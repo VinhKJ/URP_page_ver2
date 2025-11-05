@@ -46,12 +46,12 @@ export function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
-            <Link href="#test-radar" data-testid="link-test-radar">
+            <Link href="https://sjc-radar-test-1040426527128.us-west1.run.app/" data-testid="link-test-radar">
               <a className="px-4 py-2 text-sm font-medium text-foreground hover-elevate active-elevate-2 rounded-lg transition-colors">
                 Test Radar
               </a>
             </Link>
-            <Link href="#kham-pha" data-testid="link-discover">
+            <Link href="https://urp-ver1.vercel.app/" data-testid="link-discover">
               <a className="px-4 py-2 text-sm font-medium text-foreground hover-elevate active-elevate-2 rounded-lg transition-colors">
                 Khám phá Bản thân
               </a>
@@ -85,7 +85,7 @@ export function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <a href="https://profile.urp.com" target="_blank" rel="noopener noreferrer" className="cursor-pointer">
+                      <a href="https://urp-ver1.vercel.app/" target="_blank" rel="noopener noreferrer" className="cursor-pointer">
                         <User className="mr-2 w-4 h-4" />
                         Hồ sơ của tôi
                       </a>

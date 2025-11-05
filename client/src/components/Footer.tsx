@@ -55,14 +55,14 @@ export function Footer() {
             <h3 className="font-semibold text-base mb-4">Liên kết nhanh</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="#test-radar">
+                <Link href="https://sjc-radar-test-1040426527128.us-west1.run.app/">
                   <a className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     Test Radar
                   </a>
                 </Link>
               </li>
               <li>
-                <Link href="#kham-pha">
+                <Link href="https://urp-ver1.vercel.app/">
                   <a className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                     Khám phá Bản thân
                   </a>
@@ -94,17 +94,17 @@ export function Footer() {
                   href="mailto:contact@urp.com"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  contact@urp.com
+                  urp.infomation@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">+84 123 456 789</span>
+                <span className="text-sm text-muted-foreground">+84 328 641 384</span>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
                 <span className="text-sm text-muted-foreground">
-                  Hà Nội, Việt Nam
+                  71 Ngũ Hành Sơn, Ngũ Hành Sơn, Đà Nẵng, Việt Nam
                 </span>
               </li>
             </ul>
